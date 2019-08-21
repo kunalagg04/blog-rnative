@@ -1,13 +1,33 @@
-import React from 'react';
+import createDataContext from './createDataContext';
 
-const BlogContext = React.createContext();
+const blogReducer = (state, action) => {
+    switch (action.type) {
+        case 'add_blogpost' :
+            return [...state , {id: Math.floor(Math.random() * 9999) ,  title : `Blog Post ${state.length + 1}`}];
+        default:
+            return state;
+    }
+};
 
-export const BlogProvider = ({ children }) => {
-    return <BlogContext.Provider value={5}>
-        {children}
-    </BlogContext.Provider>
-}
+// const addBlogPost = () => {
+//     dispatch({type : 'add_blogpost'});
+// }
 
-//provider is used to store info to be transmitted to child comps.
+const addBlogPost = (dispatch) => {
+    return () => {
+        dispatch({type : 'add_blogpost'});
+    };
+};
 
-export default BlogContext;
+const deleteBlogPost = (dispatch) => {
+//doubt : id kahan se aayi bc
+    return (id) => {
+        dispatch({type : 'add_blogpost' , payload: id});
+    };
+};
+
+export const { Context , Provider } = createDataContext(
+    blogReducer,
+    { addBlogPost , deleteBlogPost },
+    []
+);
